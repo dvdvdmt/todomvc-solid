@@ -1,23 +1,17 @@
-import logo from './logo.svg'
-import styles from './App.module.css'
+import {Show} from 'solid-js'
+import {store} from './store'
+import {TodoList} from './TodoList'
 
 export function App() {
   return (
-    <div class={styles.App}>
-      <header class={styles.header}>
-        <img src={logo} class={styles.logo} alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          class={styles.link}
-          href="https://github.com/solidjs/solid"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn Solid
-        </a>
+    <section class="todoapp">
+      <header class="header">
+        <h1>todos</h1>
+        <input class="new-todo" placeholder="What needs to be done?" autofocus />
       </header>
-    </div>
+      <Show when={store.todos.length}>
+        <TodoList todos={store.todos} />
+      </Show>
+    </section>
   )
 }
