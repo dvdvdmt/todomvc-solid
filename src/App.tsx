@@ -1,8 +1,9 @@
 import {onMount, Show} from 'solid-js'
-import {addTodoItem, deleteTodoItem, store} from './store'
 import {TodoList} from './TodoList'
+import {createAppStore} from './store'
 
 export function App() {
+  const {store, deleteTodoItem, addTodoItem} = createAppStore()
   let inputRef: HTMLInputElement
   onMount(() => {
     inputRef.focus()
