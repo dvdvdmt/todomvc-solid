@@ -16,7 +16,7 @@ export function TodoList(props: IProps) {
         <For each={props.todos}>{(item) => <TodoItem todo={item} onDelete={props.onDelete} />}</For>
       </ul>
       <footer class="footer">
-        <span class="todo-count"></span>
+        <span class="todo-count">{props.todos.length}</span>
         <ul class="filters">
           <li>
             <a href="#/" class="selected">
