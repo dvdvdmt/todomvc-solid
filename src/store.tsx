@@ -16,3 +16,7 @@ const [store, setStore] = createStore<IStore>({
 })
 
 export {store, setStore}
+
+export function deleteTodoItem(id: number) {
+  setStore('todos', (todos) => todos.filter((todo) => todo.id !== id))
+}

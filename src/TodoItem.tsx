@@ -1,6 +1,21 @@
 import {ITodoItem} from './store'
 
-export function TodoItem(props: {todo: ITodoItem}) {
-  console.log(props.todo)
-  return <div>{props.todo.title}</div>
+interface IProps {
+  todo: ITodoItem
+  onDelete?: (id: number) => void
+}
+
+export function TodoItem(props: IProps) {
+  function handleDelete() {
+    props.onDelete?.(props.todo.id)
+  }
+  return (
+    <li>
+      <div class="view">
+        <input type="checkbox" class="toggle" />
+        <label>{props.todo.title}</label>
+        <button class="destroy" onClick={handleDelete} />
+      </div>
+    </li>
+  )
 }

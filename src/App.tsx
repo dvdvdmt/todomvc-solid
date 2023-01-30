@@ -1,5 +1,5 @@
 import {Show} from 'solid-js'
-import {store} from './store'
+import {deleteTodoItem, store} from './store'
 import {TodoList} from './TodoList'
 
 export function App() {
@@ -10,7 +10,7 @@ export function App() {
         <input class="new-todo" placeholder="What needs to be done?" autofocus />
       </header>
       <Show when={store.todos.length}>
-        <TodoList todos={store.todos} />
+        <TodoList todos={store.todos} onDelete={deleteTodoItem} />
       </Show>
     </section>
   )
