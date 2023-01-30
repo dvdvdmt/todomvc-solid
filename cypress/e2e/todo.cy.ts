@@ -187,10 +187,8 @@ describe('example to-do app', function () {
 
     it('should hide #main and #footer', function () {
       cy.get(selectors.todoItems).should('not.exist')
-      // some apps remove elements from the DOM
-      // but some just hide them
-      cy.get(selectors.main).should('not.be.visible')
-      cy.get(selectors.footer).should('not.be.visible')
+      cy.get(selectors.main).should('not.exist')
+      cy.get(selectors.footer).should('not.exist')
     })
   })
 
