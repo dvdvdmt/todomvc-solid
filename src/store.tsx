@@ -11,8 +11,8 @@ interface IStore {
 }
 
 const [store, setStore] = createStore<IStore>({
-  // todos: [],
-  todos: [{id: 1, completed: false, title: 'Todo 1'}],
+  todos: [],
+  // todos: [{id: 1, completed: false, title: 'Todo 1'}],
 })
 
 export {store, setStore}

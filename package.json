@@ -6,11 +6,13 @@
     "start": "vite",
     "dev": "vite",
     "build": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "e2e:run": "cypress run",
+    "e2e:open": "cypress open"
   },
   "license": "MIT",
   "devDependencies": {
-    "cypress": "^9.1.0",
+    "cypress": "^12.4.1",
     "prettier": "^2.4.1",
     "todomvc-app-css": "^2.4.1",
     "typescript": "^4.9.4",

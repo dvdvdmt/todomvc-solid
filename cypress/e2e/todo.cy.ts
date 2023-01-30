@@ -1,6 +1,7 @@
 /// <reference types="cypress" />
 
 // checks that local storage has an item with given text
+// @ts-ignore
 const checkTodosInLocalStorage = (presentText: string) => {
   cy.log(`Looking for "${presentText}" in localStorage`)
 
