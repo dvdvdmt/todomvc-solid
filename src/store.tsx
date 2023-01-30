@@ -36,7 +36,7 @@ export function createAppStore() {
     todos: storedTodos,
     // todos: [{id: 1, completed: false, title: 'Todo 1'}],
   })
-  return {store, setStore, deleteTodoItem, addTodoItem}
+  return {store, setStore, deleteTodoItem, addTodoItem, toggleAll, toggleItem}
 
   function deleteTodoItem(id: number) {
     setStore('todos', (todos) => todos.filter((todo) => todo.id !== id))
@@ -45,6 +45,18 @@ export function createAppStore() {
 
   function addTodoItem(title: string) {
     setStore('todos', (todos) => [...todos, {id: todos.length + 1, completed: false, title}])
+    save()
+  }
+
+  function toggleAll(enabled: boolean) {
+    setStore('todos', (todos) => todos.map((todo) => ({...todo, completed: enabled})))
+    save()
+  }
+
+  function toggleItem(id: number, completed: boolean) {
+    setStore('todos', (todos) =>
+      todos.map((todo) => (todo.id === id ? {...todo, completed} : todo))
+    )
     save()
   }
 

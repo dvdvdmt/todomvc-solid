@@ -1,9 +1,9 @@
-import {onMount, Show} from 'solid-js'
-import {TodoList} from './TodoList'
+import {For, onMount, Show} from 'solid-js'
 import {createAppStore} from './store'
+import {TodoItem} from './TodoItem'
 
 export function App() {
-  const {store, deleteTodoItem, addTodoItem} = createAppStore()
+  const {store, deleteTodoItem, addTodoItem, toggleAll, toggleItem} = createAppStore()
   let inputRef: HTMLInputElement
   onMount(() => {
     inputRef.focus()
@@ -24,7 +24,39 @@ export function App() {
         />
       </header>
       <Show when={store.todos.length}>
-        <TodoList todos={store.todos} onDelete={deleteTodoItem} />
+        <section class="main">
+          <input
+            id="toggle-all"
+            class="toggle-all"
+            type="checkbox"
+            onChange={(e) => {
+              toggleAll(e.currentTarget.checked)
+            }}
+          />
+          <label for="toggle-all">Mark all as complete</label>
+          <ul class="todo-list">
+            <For each={store.todos}>
+              {(item) => <TodoItem todo={item} onDelete={deleteTodoItem} onToggle={toggleItem} />}
+            </For>
+          </ul>
+          <footer class="footer">
+            <span class="todo-count">{store.todos.length}</span>
+            <ul class="filters">
+              <li>
+                <a href="#/" class="selected">
+                  All
+                </a>
+              </li>
+              <li>
+                <a href="#/active">Active</a>
+              </li>
+              <li>
+                <a href="#/completed">Completed</a>
+              </li>
+            </ul>
+            <button class="clear-completed">Clear completed</button>
+          </footer>
+        </section>
       </Show>
     </section>
   )
