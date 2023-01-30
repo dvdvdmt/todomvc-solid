@@ -17,7 +17,7 @@ export function App() {
           class="new-todo"
           placeholder="What needs to be done?"
           onChange={(e) => {
-            addTodoItem(e.currentTarget.value)
+            addTodoItem(e.currentTarget.value.trim())
           }}
           ref={inputRef!}
           autofocus
