@@ -215,7 +215,7 @@ describe('example to-do app', function () {
 
     it('should clear text input field when an item is added', function () {
       cy.get(selectors.newTodo).type(`${TODO_ITEM_ONE}{enter}`)
-      cy.get(selectors.newTodo).should('have.text', '')
+      cy.get(selectors.newTodo).should('have.value', '')
       checkNumberOfTodosInLocalStorage(1)
     })
 
@@ -231,9 +231,9 @@ describe('example to-do app', function () {
       // `cy.contains` can verify this correctly
       cy.get(selectors.count).contains('3')
 
-      cy.get(selectors.todoItems).eq(0).find('label').should('contain', TODO_ITEM_ONE)
-      cy.get(selectors.todoItems).eq(1).find('label').should('contain', TODO_ITEM_TWO)
-      cy.get(selectors.todoItems).eq(2).find('label').should('contain', TODO_ITEM_THREE)
+      cy.get('@todos').eq(0).find('label').should('contain', TODO_ITEM_ONE)
+      cy.get('@todos').eq(1).find('label').should('contain', TODO_ITEM_TWO)
+      cy.get('@todos').eq(2).find('label').should('contain', TODO_ITEM_THREE)
       checkNumberOfTodosInLocalStorage(3)
     })
 
@@ -291,9 +291,9 @@ describe('example to-do app', function () {
       checkItemSaved()
 
       // get each todo li and ensure its class is 'completed'
-      cy.get(selectors.todoItems).eq(0).should('have.class', 'completed')
-      cy.get(selectors.todoItems).eq(1).should('have.class', 'completed')
-      cy.get(selectors.todoItems).eq(2).should('have.class', 'completed')
+      cy.get('@todos').eq(0).should('have.class', 'completed')
+      cy.get('@todos').eq(1).should('have.class', 'completed')
+      cy.get('@todos').eq(2).should('have.class', 'completed')
       checkNumberOfCompletedTodosInLocalStorage(3)
     })
 
@@ -304,9 +304,9 @@ describe('example to-do app', function () {
       cy.get(selectors.toggleAll).uncheck({force: true})
       checkItemSaved()
 
-      cy.get(selectors.todoItems).eq(0).should('not.have.class', 'completed')
-      cy.get(selectors.todoItems).eq(1).should('not.have.class', 'completed')
-      cy.get(selectors.todoItems).eq(2).should('not.have.class', 'completed')
+      cy.get('@todos').eq(0).should('not.have.class', 'completed')
+      cy.get('@todos').eq(1).should('not.have.class', 'completed')
+      cy.get('@todos').eq(2).should('not.have.class', 'completed')
       checkNumberOfCompletedTodosInLocalStorage(0)
     })
 
@@ -347,14 +347,14 @@ describe('example to-do app', function () {
       cy.createTodo(TODO_ITEM_ONE).as('firstTodo')
       cy.createTodo(TODO_ITEM_TWO).as('secondTodo')
 
-      cy.get(selectors.todoItems).eq(0).find('.toggle').check()
-      cy.get(selectors.todoItems).eq(0).should('have.class', 'completed')
+      cy.get('@firstTodo').find('.toggle').check()
+      cy.get('@firstTodo').should('have.class', 'completed')
 
-      cy.get(selectors.todoItems).eq(1).should('not.have.class', 'completed')
-      cy.get(selectors.todoItems).eq(1).find('.toggle').check()
+      cy.get('@secondTodo').should('not.have.class', 'completed')
+      cy.get('@secondTodo').find('.toggle').check()
 
-      cy.get(selectors.todoItems).eq(0).should('have.class', 'completed')
-      cy.get(selectors.todoItems).eq(1).should('have.class', 'completed')
+      cy.get('@firstTodo').should('have.class', 'completed')
+      cy.get('@secondTodo').should('have.class', 'completed')
       checkNumberOfCompletedTodosInLocalStorage(2)
     })
 
@@ -419,7 +419,7 @@ describe('example to-do app', function () {
     })
 
     it('should hide other controls when editing', function () {
-      cy.get(selectors.todoItems).eq(1).find('label').dblclick()
+      cy.get('@todos').eq(1).find('label').dblclick()
 
       cy.get(selectors.todoItems).eq(1).find('.toggle').should('not.be.visible')
       cy.get(selectors.todoItems).eq(1).find('label').should('not.be.visible')
@@ -427,7 +427,7 @@ describe('example to-do app', function () {
     })
 
     it('should save edits on blur', function () {
-      cy.get(selectors.todoItems).eq(1).find('label').dblclick()
+      cy.get('@todos').eq(1).find('label').dblclick()
 
       cy.get(selectors.todoItems)
         .eq(1)
@@ -447,7 +447,7 @@ describe('example to-do app', function () {
     })
 
     it('should trim entered text', function () {
-      cy.get(selectors.todoItems).eq(1).find('label').dblclick()
+      cy.get('@todos').eq(1).find('label').dblclick()
       checkTodosInLocalStorage(TODO_ITEM_TWO)
 
       cy.get(selectors.todoItems)
@@ -462,7 +462,7 @@ describe('example to-do app', function () {
     })
 
     it('should remove the item if an empty text string was entered', function () {
-      cy.get(selectors.todoItems).eq(1).find('label').dblclick()
+      cy.get('@todos').eq(1).find('label').dblclick()
 
       cy.get(selectors.todoItems).eq(1).find('.edit').clear().type('{enter}')
 
@@ -498,20 +498,20 @@ describe('example to-do app', function () {
     })
 
     it('should display the correct text', function () {
-      cy.get(selectors.todoItems).eq(0).find('.toggle').check()
+      cy.get('@todos').eq(0).find('.toggle').check()
       cy.get(selectors.clearCompleted).contains('Clear completed')
     })
 
     it('should remove completed items when clicked', function () {
-      cy.get(selectors.todoItems).eq(1).find('.toggle').check()
+      cy.get('@todos').eq(1).find('.toggle').check()
       cy.get(selectors.clearCompleted).click()
-      cy.get(selectors.todoItems).should('have.length', 2)
-      cy.get(selectors.todoItems).eq(0).should('contain', TODO_ITEM_ONE)
-      cy.get(selectors.todoItems).eq(1).should('contain', TODO_ITEM_THREE)
+      cy.get('@todos').should('have.length', 2)
+      cy.get('@todos').eq(0).should('contain', TODO_ITEM_ONE)
+      cy.get('@todos').eq(1).should('contain', TODO_ITEM_THREE)
     })
 
     it('should be hidden when there are no items that are completed', function () {
-      cy.get(selectors.todoItems).eq(1).find('.toggle').check()
+      cy.get('@todos').eq(1).find('.toggle').check()
       cy.get(selectors.clearCompleted).should('be.visible').click()
       cy.get(selectors.clearCompleted).should('not.be.visible')
     })
@@ -553,7 +553,7 @@ describe('example to-do app', function () {
     })
 
     it('should allow me to display active items', function () {
-      cy.get(selectors.todoItems).eq(1).find('.toggle').check()
+      cy.get('@todos').eq(1).find('.toggle').check()
       checkNumberOfCompletedTodosInLocalStorage(1)
       cy.contains(selectors.filterItems, 'Active').click()
       visibleTodos().should('have.length', 2).eq(0).should('contain', TODO_ITEM_ONE)
@@ -561,7 +561,7 @@ describe('example to-do app', function () {
     })
 
     it('should respect the back button', function () {
-      cy.get(selectors.todoItems).eq(1).find('.toggle').check()
+      cy.get('@todos').eq(1).find('.toggle').check()
       checkNumberOfCompletedTodosInLocalStorage(1)
 
       cy.log('Showing all items')
