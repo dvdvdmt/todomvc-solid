@@ -48,15 +48,13 @@ export function createAppStore() {
     save()
   }
 
-  function toggleAll(enabled: boolean) {
-    setStore('todos', (todos) => todos.map((todo) => ({...todo, completed: enabled})))
+  function toggleAll(completed: boolean) {
+    setStore('todos', {}, {completed}) // goes through all todos and sets their completed status
     save()
   }
 
   function toggleItem(id: number, completed: boolean) {
-    setStore('todos', (todos) =>
-      todos.map((todo) => (todo.id === id ? {...todo, completed} : todo))
-    )
+    setStore('todos', (todo) => todo.id === id, {completed}) // filters item by id and sets completed status
     save()
   }
 
