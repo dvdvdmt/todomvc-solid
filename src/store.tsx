@@ -1,5 +1,6 @@
-import {createStore} from 'solid-js/store'
-import {ITodo} from '../src-old/app-model'
+import {createStore} from "solid-js/store";
+import {ITodo} from "../src-old/app-model";
+import {createMemo} from "solid-js";
 
 export interface ITodoItem {
   id: number
@@ -36,7 +37,8 @@ export function createAppStore() {
     todos: storedTodos,
     // todos: [{id: 1, completed: false, title: 'Todo 1'}],
   })
-  return {store, setStore, deleteTodoItem, addTodoItem, toggleAll, toggleItem}
+  const isAllComplete = createMemo(() => store.todos.every((todo) => todo.completed))
+  return {store, setStore, deleteTodoItem, addTodoItem, toggleAll, toggleItem, isAllComplete}
 
   function deleteTodoItem(id: number) {
     setStore('todos', (todos) => todos.filter((todo) => todo.id !== id))
@@ -48,13 +50,19 @@ export function createAppStore() {
     save()
   }
 
-  function toggleAll(completed: boolean) {
-    setStore('todos', {}, {completed}) // goes through all todos and sets their completed status
+  /**
+   * Toggles all todos to the opposite of the current state.
+   */
+  function toggleAll() {
+    setStore('todos', {}, {completed: !isAllComplete()})
     save()
   }
 
+  /**
+   * Toggles a single todo item.
+   */
   function toggleItem(id: number, completed: boolean) {
-    setStore('todos', (todo) => todo.id === id, {completed}) // filters item by id and sets completed status
+    setStore('todos', (todo) => todo.id === id, {completed})
     save()
   }
 

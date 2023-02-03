@@ -1,9 +1,10 @@
-import {createEffect, For, onMount, Show} from 'solid-js'
-import {createAppStore} from './store'
-import {TodoItem} from './TodoItem'
+import {For, onMount, Show} from "solid-js";
+import {createAppStore} from "./store";
+import {TodoItem} from "./TodoItem";
 
 export function App() {
-  const {store, deleteTodoItem, addTodoItem, toggleAll, toggleItem} = createAppStore()
+  const {store, deleteTodoItem, addTodoItem, toggleAll, toggleItem, isAllComplete} =
+    createAppStore()
   let inputRef: HTMLInputElement
   onMount(() => {
     inputRef.focus()
@@ -30,9 +31,8 @@ export function App() {
             id="toggle-all"
             class="toggle-all"
             type="checkbox"
-            onChange={(e) => {
-              toggleAll(e.currentTarget.checked)
-            }}
+            onChange={toggleAll}
+            checked={isAllComplete()}
           />
           <label for="toggle-all">Mark all as complete</label>
           <ul class="todo-list">
