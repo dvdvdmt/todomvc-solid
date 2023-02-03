@@ -387,9 +387,7 @@ describe('example to-do app', function () {
 
       // clear out the inputs current value
       // and type a new value
-      visibleTodos()
-        .eq(1)
-        .find('.edit')
+      cy.get('.edit')
         .should('have.value', TODO_ITEM_TWO)
         // clear + type text + enter key
         .clear()

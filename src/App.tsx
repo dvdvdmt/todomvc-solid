@@ -1,9 +1,9 @@
-import {For, onMount, Show} from "solid-js";
-import {createAppStore} from "./store";
-import {TodoItem} from "./TodoItem";
+import {For, onMount, Show} from 'solid-js'
+import {createAppStore} from './store'
+import {TodoItem} from './TodoItem'
 
 export function App() {
-  const {store, deleteTodoItem, addTodoItem, toggleAll, toggleItem, isAllComplete} =
+  const {store, deleteTodoItem, addTodoItem, toggleAll, toggleItem, isAllComplete, editTodoItem} =
     createAppStore()
   let inputRef: HTMLInputElement
   onMount(() => {
@@ -37,7 +37,14 @@ export function App() {
           <label for="toggle-all">Mark all as complete</label>
           <ul class="todo-list">
             <For each={store.todos}>
-              {(item) => <TodoItem todo={item} onDelete={deleteTodoItem} onToggle={toggleItem} />}
+              {(item) => (
+                <TodoItem
+                  todo={item}
+                  onDelete={deleteTodoItem}
+                  onToggle={toggleItem}
+                  onEdit={editTodoItem}
+                />
+              )}
             </For>
           </ul>
           <footer class="footer">

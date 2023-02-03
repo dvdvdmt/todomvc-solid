@@ -1,6 +1,6 @@
-import {createStore} from "solid-js/store";
-import {ITodo} from "../src-old/app-model";
-import {createMemo} from "solid-js";
+import {createStore} from 'solid-js/store'
+import {ITodo} from '../src-old/app-model'
+import {createMemo} from 'solid-js'
 
 export interface ITodoItem {
   id: number
@@ -38,7 +38,16 @@ export function createAppStore() {
     // todos: [{id: 1, completed: false, title: 'Todo 1'}],
   })
   const isAllComplete = createMemo(() => store.todos.every((todo) => todo.completed))
-  return {store, setStore, deleteTodoItem, addTodoItem, toggleAll, toggleItem, isAllComplete}
+  return {
+    store,
+    setStore,
+    deleteTodoItem,
+    addTodoItem,
+    toggleAll,
+    toggleItem,
+    isAllComplete,
+    editTodoItem,
+  }
 
   function deleteTodoItem(id: number) {
     setStore('todos', (todos) => todos.filter((todo) => todo.id !== id))
@@ -68,5 +77,10 @@ export function createAppStore() {
 
   function save() {
     window.localStorage.setItem(localStorageKey, JSON.stringify(store.todos))
+  }
+
+  function editTodoItem(id: number, title: string) {
+    setStore('todos', (todo) => todo.id === id, {title})
+    save()
   }
 }
