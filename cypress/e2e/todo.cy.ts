@@ -137,8 +137,9 @@ describe('example to-do app', function () {
   let selectors = {
     newTodo: '.new-todo',
     todoList: '.todo-list',
+    todoItemEditor: '.edit',
+    todoItemInEditMode: '.editing',
     todoItems: '.todo-list li',
-    todoItemEdited: '.todo-list li.editing',
     todoItemsVisible: '.todo-list li:visible',
     count: 'span.todo-count',
     main: '.main',
@@ -388,7 +389,7 @@ describe('example to-do app', function () {
 
       // clear out the inputs current value
       // and type a new value
-      cy.get('.edit')
+      cy.get(selectors.todoItemEditor)
         .should('have.value', TODO_ITEM_TWO)
         // clear + type text + enter key
         .clear()
@@ -421,17 +422,15 @@ describe('example to-do app', function () {
       // Here is how we can test not visible and not exist cases at the same time
       // https://stackoverflow.com/a/71785870/3167855
       cy.get('@todos').eq(1).find('label').dblclick()
-      cy.get(`${selectors.todoItemEdited} .toggle`).should('not.exist')
-      cy.get(`${selectors.todoItemEdited} .label`).should('not.exist')
+      cy.get(`${selectors.todoItemInEditMode} .toggle`).should('not.exist')
+      cy.get(`${selectors.todoItemInEditMode} .label`).should('not.exist')
       checkNumberOfTodosInLocalStorage(3)
     })
 
     it('should save edits on blur', function () {
       cy.get('@todos').eq(1).find('label').dblclick()
 
-      cy.get(selectors.todoItems)
-        .eq(1)
-        .find('.edit')
+      cy.get(selectors.todoItemEditor)
         .clear()
         .type('buy some sausages')
         // we can just send the blur event directly
@@ -450,10 +449,9 @@ describe('example to-do app', function () {
       cy.get('@todos').eq(1).find('label').dblclick()
       checkTodosInLocalStorage(TODO_ITEM_TWO)
 
-      cy.get(selectors.todoItems)
-        .eq(1)
-        .find('.edit')
-        .type('{selectall}{backspace}    buy some sausages    {enter}')
+      cy.get(selectors.todoItemEditor).type(
+        '{selectall}{backspace}    buy some sausages    {enter}'
+      )
 
       visibleTodos().eq(0).should('contain', TODO_ITEM_ONE)
       visibleTodos().eq(1).should('contain', 'buy some sausages')
@@ -464,7 +462,7 @@ describe('example to-do app', function () {
     it('should remove the item if an empty text string was entered', function () {
       cy.get('@todos').eq(1).find('label').dblclick()
 
-      cy.get(selectors.todoItems).eq(1).find('.edit').clear().type('{enter}')
+      cy.get(selectors.todoItemEditor).clear().type('{enter}')
 
       visibleTodos().should('have.length', 2)
       checkNumberOfTodosInLocalStorage(2)
@@ -473,7 +471,7 @@ describe('example to-do app', function () {
     it('should cancel edits on escape', function () {
       visibleTodos().eq(1).find('label').dblclick()
 
-      cy.get(selectors.todoItems).eq(1).find('.edit').type('{selectall}{backspace}foo{esc}')
+      cy.get(selectors.todoItemEditor).type('{selectall}{backspace}foo{esc}')
 
       visibleTodos().eq(0).should('contain', TODO_ITEM_ONE)
       visibleTodos().eq(1).should('contain', TODO_ITEM_TWO)

@@ -22,7 +22,9 @@ export function TodoItem(props: IProps) {
             todo={props.todo}
             onBlur={closeEditor}
             onSubmit={(text, prevText) => {
-              if (text !== prevText) {
+              if (text.trim() === '') {
+                props.onDelete?.(props.todo.id)
+              } else if (text !== prevText) {
                 props.onEdit?.(props.todo.id, text)
               }
               closeEditor()
