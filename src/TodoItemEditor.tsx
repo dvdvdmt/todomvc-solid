@@ -24,6 +24,11 @@ export function TodoItemEditor(props: IProps) {
       onBlur={() => {
         props.onBlur?.()
       }}
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') {
+          props.onBlur?.()
+        }
+      }}
     />
   )
 }
