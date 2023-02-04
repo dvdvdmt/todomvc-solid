@@ -105,6 +105,8 @@ export function createAppStore() {
 
   const isSomeComplete = createMemo(() => store.todos.some((todo) => todo.completed))
 
+  const isFilterSelected = (filter: TodoFilter) => store.filter === filter
+
   const filteredTodos = createMemo(() => {
     switch (store.filter) {
       case TodoFilter.Active:
@@ -122,6 +124,7 @@ export function createAppStore() {
     editTodoItem,
     filteredTodos,
     isAllComplete,
+    isFilterSelected,
     isSomeComplete,
     removeCompleted,
     store,

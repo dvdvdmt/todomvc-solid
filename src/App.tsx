@@ -1,5 +1,5 @@
 import {For, onMount, Show} from 'solid-js'
-import {createAppStore} from './store'
+import {createAppStore, TodoFilter} from './store'
 import {TodoItem} from './TodoItem'
 
 export function App() {
@@ -10,6 +10,7 @@ export function App() {
     filteredTodos,
     isAllComplete,
     isSomeComplete,
+    isFilterSelected,
     removeCompleted,
     store,
     toggleAll,
@@ -61,15 +62,22 @@ export function App() {
             <span class="todo-count">{store.todos.length}</span>
             <ul class="filters">
               <li>
-                <a href="#/" class="selected">
+                <a href="#/" classList={{selected: isFilterSelected(TodoFilter.All)}}>
                   All
                 </a>
               </li>
               <li>
-                <a href="#/active">Active</a>
+                <a href="#/active" classList={{selected: isFilterSelected(TodoFilter.Active)}}>
+                  Active
+                </a>
               </li>
               <li>
-                <a href="#/completed">Completed</a>
+                <a
+                  href="#/completed"
+                  classList={{selected: isFilterSelected(TodoFilter.Completed)}}
+                >
+                  Completed
+                </a>
               </li>
             </ul>
             <Show when={isSomeComplete()}>
