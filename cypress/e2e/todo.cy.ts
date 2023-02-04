@@ -521,8 +521,14 @@ describe('example to-do app', function () {
       // mimicking TodoMVC tests
       // by writing out this function
       function testState() {
-        cy.get('@firstTodo').should('contain', TODO_ITEM_ONE).and('have.class', 'completed')
-        cy.get('@secondTodo').should('contain', TODO_ITEM_TWO).and('not.have.class', 'completed')
+        cy.get(selectors.todoItems)
+          .eq(0)
+          .should('contain', TODO_ITEM_ONE)
+          .and('have.class', 'completed')
+        cy.get(selectors.todoItems)
+          .eq(1)
+          .should('contain', TODO_ITEM_TWO)
+          .and('not.have.class', 'completed')
       }
 
       cy.createTodo(TODO_ITEM_ONE).as('firstTodo')
