@@ -1,9 +1,8 @@
 import {createStore} from 'solid-js/store'
-import {ITodo} from '../src-old/app-model'
 import {createMemo} from 'solid-js'
 
 export interface ITodoItem {
-  id: number
+  id: string
   completed: boolean
   title: string
 }
@@ -14,7 +13,7 @@ interface IStore {
 
 const localStorageKey = 'todos'
 
-function getTodosFromStorage(): ITodo[] {
+function getTodosFromStorage(): ITodoItem[] {
   const json = localStorage.getItem(localStorageKey)
   if (!json) {
     return []
@@ -39,23 +38,24 @@ export function createAppStore() {
   })
   const isAllComplete = createMemo(() => store.todos.every((todo) => todo.completed))
   return {
-    store,
-    setStore,
-    deleteTodoItem,
     addTodoItem,
+    deleteTodoItem,
+    editTodoItem,
+    isAllComplete,
+    removeCompleted,
+    setStore,
+    store,
     toggleAll,
     toggleItem,
-    isAllComplete,
-    editTodoItem,
   }
 
-  function deleteTodoItem(id: number) {
+  function deleteTodoItem(id: string) {
     setStore('todos', (todos) => todos.filter((todo) => todo.id !== id))
     save()
   }
 
   function addTodoItem(title: string) {
-    setStore('todos', (todos) => [...todos, {id: todos.length + 1, completed: false, title}])
+    setStore('todos', (todos) => [...todos, {id: Date.now().toString(10), completed: false, title}])
     save()
   }
 
@@ -70,7 +70,7 @@ export function createAppStore() {
   /**
    * Toggles a single todo item.
    */
-  function toggleItem(id: number, completed: boolean) {
+  function toggleItem(id: string, completed: boolean) {
     setStore('todos', (todo) => todo.id === id, {completed})
     save()
   }
@@ -79,8 +79,13 @@ export function createAppStore() {
     window.localStorage.setItem(localStorageKey, JSON.stringify(store.todos))
   }
 
-  function editTodoItem(id: number, title: string) {
+  function editTodoItem(id: string, title: string) {
     setStore('todos', (todo) => todo.id === id, {title})
+    save()
+  }
+
+  function removeCompleted() {
+    setStore('todos', (todos) => todos.filter((todo) => !todo.completed))
     save()
   }
 }

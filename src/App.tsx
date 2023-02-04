@@ -3,8 +3,16 @@ import {createAppStore} from './store'
 import {TodoItem} from './TodoItem'
 
 export function App() {
-  const {store, deleteTodoItem, addTodoItem, toggleAll, toggleItem, isAllComplete, editTodoItem} =
-    createAppStore()
+  const {
+    store,
+    deleteTodoItem,
+    addTodoItem,
+    toggleAll,
+    toggleItem,
+    isAllComplete,
+    editTodoItem,
+    removeCompleted,
+  } = createAppStore()
   let inputRef: HTMLInputElement
   onMount(() => {
     inputRef.focus()
@@ -62,7 +70,9 @@ export function App() {
                 <a href="#/completed">Completed</a>
               </li>
             </ul>
-            <button class="clear-completed">Clear completed</button>
+            <button class="clear-completed" onClick={removeCompleted}>
+              Clear completed
+            </button>
           </footer>
         </section>
       </Show>

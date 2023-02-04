@@ -4,9 +4,9 @@ import {createSignal, Show} from 'solid-js'
 
 interface IProps {
   todo: ITodoItem
-  onDelete?: (id: number) => void
-  onToggle?: (id: number, completed: boolean) => void
-  onEdit?: (id: number, title: string) => void
+  onDelete?: (id: string) => void
+  onToggle?: (id: string, completed: boolean) => void
+  onEdit?: (id: string, title: string) => void
 }
 
 export function TodoItem(props: IProps) {
