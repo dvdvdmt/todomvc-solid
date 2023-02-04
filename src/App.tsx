@@ -4,15 +4,16 @@ import {TodoItem} from './TodoItem'
 
 export function App() {
   const {
-    store,
-    deleteTodoItem,
     addTodoItem,
-    toggleAll,
-    toggleItem,
+    deleteTodoItem,
+    editTodoItem,
+    filteredTodos,
     isAllComplete,
     isSomeComplete,
-    editTodoItem,
     removeCompleted,
+    store,
+    toggleAll,
+    toggleItem,
   } = createAppStore()
   let inputRef: HTMLInputElement
   onMount(() => {
@@ -45,7 +46,7 @@ export function App() {
           />
           <label for="toggle-all">Mark all as complete</label>
           <ul class="todo-list">
-            <For each={store.todos}>
+            <For each={filteredTodos()}>
               {(item) => (
                 <TodoItem
                   todo={item}

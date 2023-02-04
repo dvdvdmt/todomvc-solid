@@ -9,6 +9,13 @@ export interface ITodoItem {
 
 interface IStore {
   todos: ITodoItem[]
+  filter: TodoFilter
+}
+
+export const enum TodoFilter {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
 }
 
 const localStorageKey = 'todos'
@@ -30,11 +37,28 @@ function getTodosFromStorage(): ITodoItem[] {
   return result
 }
 
+function getFilterFromUrl(): TodoFilter {
+  const hash = window.location.hash
+  if (hash.endsWith(TodoFilter.Active)) {
+    return TodoFilter.Active
+  }
+  if (hash.endsWith(TodoFilter.Completed)) {
+    return TodoFilter.Completed
+  }
+  return TodoFilter.All
+}
+
 export function createAppStore() {
   const storedTodos = getTodosFromStorage()
+  const filter = getFilterFromUrl()
+
   const [store, setStore] = createStore<IStore>({
     todos: storedTodos,
-    // todos: [{id: 1, completed: false, title: 'Todo 1'}],
+    filter,
+  })
+
+  window.addEventListener('popstate', () => {
+    setStore('filter', getFilterFromUrl())
   })
 
   const deleteTodoItem = (id: string) => {
@@ -81,10 +105,22 @@ export function createAppStore() {
 
   const isSomeComplete = createMemo(() => store.todos.some((todo) => todo.completed))
 
+  const filteredTodos = createMemo(() => {
+    switch (store.filter) {
+      case TodoFilter.Active:
+        return store.todos.filter((todo) => !todo.completed)
+      case TodoFilter.Completed:
+        return store.todos.filter((todo) => todo.completed)
+      default:
+        return store.todos
+    }
+  })
+
   return {
     addTodoItem,
     deleteTodoItem,
     editTodoItem,
+    filteredTodos,
     isAllComplete,
     isSomeComplete,
     removeCompleted,
