@@ -503,9 +503,10 @@ describe('example to-do app', function () {
     it('should remove completed items when clicked', function () {
       cy.get('@todos').eq(1).find('.toggle').check()
       cy.get(selectors.clearCompleted).click()
-      cy.get('@todos').should('have.length', 2)
-      cy.get('@todos').eq(0).should('contain', TODO_ITEM_ONE)
-      cy.get('@todos').eq(1).should('contain', TODO_ITEM_THREE)
+      cy.get(selectors.todoItems).should('have.length', 2)
+      // Solid store update triggers recreation of the list element in DOM, hence the need to reselect.
+      cy.get(selectors.todoItems).eq(0).should('contain', TODO_ITEM_ONE)
+      cy.get(selectors.todoItems).eq(1).should('contain', TODO_ITEM_THREE)
     })
 
     it('should be hidden when there are no items that are completed', function () {
