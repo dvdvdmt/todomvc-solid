@@ -512,7 +512,7 @@ describe('example to-do app', function () {
     it('should be hidden when there are no items that are completed', function () {
       cy.get('@todos').eq(1).find('.toggle').check()
       cy.get(selectors.clearCompleted).should('be.visible').click()
-      cy.get(selectors.clearCompleted).should('not.be.visible')
+      cy.get(selectors.clearCompleted).should('not.exist')
     })
   })
 

@@ -10,6 +10,7 @@ export function App() {
     toggleAll,
     toggleItem,
     isAllComplete,
+    isSomeComplete,
     editTodoItem,
     removeCompleted,
   } = createAppStore()
@@ -70,9 +71,11 @@ export function App() {
                 <a href="#/completed">Completed</a>
               </li>
             </ul>
-            <button class="clear-completed" onClick={removeCompleted}>
-              Clear completed
-            </button>
+            <Show when={isSomeComplete()}>
+              <button class="clear-completed" onClick={removeCompleted}>
+                Clear completed
+              </button>
+            </Show>
           </footer>
         </section>
       </Show>

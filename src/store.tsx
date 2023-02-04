@@ -36,25 +36,13 @@ export function createAppStore() {
     todos: storedTodos,
     // todos: [{id: 1, completed: false, title: 'Todo 1'}],
   })
-  const isAllComplete = createMemo(() => store.todos.every((todo) => todo.completed))
-  return {
-    addTodoItem,
-    deleteTodoItem,
-    editTodoItem,
-    isAllComplete,
-    removeCompleted,
-    setStore,
-    store,
-    toggleAll,
-    toggleItem,
-  }
 
-  function deleteTodoItem(id: string) {
+  const deleteTodoItem = (id: string) => {
     setStore('todos', (todos) => todos.filter((todo) => todo.id !== id))
     save()
   }
 
-  function addTodoItem(title: string) {
+  const addTodoItem = (title: string) => {
     setStore('todos', (todos) => [...todos, {id: Date.now().toString(10), completed: false, title}])
     save()
   }
@@ -62,7 +50,7 @@ export function createAppStore() {
   /**
    * Toggles all todos to the opposite of the current state.
    */
-  function toggleAll() {
+  const toggleAll = () => {
     setStore('todos', {}, {completed: !isAllComplete()})
     save()
   }
@@ -70,22 +58,38 @@ export function createAppStore() {
   /**
    * Toggles a single todo item.
    */
-  function toggleItem(id: string, completed: boolean) {
+  const toggleItem = (id: string, completed: boolean) => {
     setStore('todos', (todo) => todo.id === id, {completed})
     save()
   }
 
-  function save() {
+  const save = () => {
     window.localStorage.setItem(localStorageKey, JSON.stringify(store.todos))
   }
 
-  function editTodoItem(id: string, title: string) {
+  const editTodoItem = (id: string, title: string) => {
     setStore('todos', (todo) => todo.id === id, {title})
     save()
   }
 
-  function removeCompleted() {
+  const removeCompleted = () => {
     setStore('todos', (todos) => todos.filter((todo) => !todo.completed))
     save()
+  }
+
+  const isAllComplete = createMemo(() => store.todos.every((todo) => todo.completed))
+
+  const isSomeComplete = createMemo(() => store.todos.some((todo) => todo.completed))
+
+  return {
+    addTodoItem,
+    deleteTodoItem,
+    editTodoItem,
+    isAllComplete,
+    isSomeComplete,
+    removeCompleted,
+    store,
+    toggleAll,
+    toggleItem,
   }
 }
