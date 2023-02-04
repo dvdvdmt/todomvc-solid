@@ -138,6 +138,7 @@ describe('example to-do app', function () {
     newTodo: '.new-todo',
     todoList: '.todo-list',
     todoItems: '.todo-list li',
+    todoItemEdited: '.todo-list li.editing',
     todoItemsVisible: '.todo-list li:visible',
     count: 'span.todo-count',
     main: '.main',
@@ -417,10 +418,11 @@ describe('example to-do app', function () {
     })
 
     it('should hide other controls when editing', function () {
+      // Here is how we can test not visible and not exist cases at the same time
+      // https://stackoverflow.com/a/71785870/3167855
       cy.get('@todos').eq(1).find('label').dblclick()
-
-      cy.get(selectors.todoItems).eq(1).find('.toggle').should('not.be.visible')
-      cy.get(selectors.todoItems).eq(1).find('label').should('not.be.visible')
+      cy.get(`${selectors.todoItemEdited} .toggle`).should('not.exist')
+      cy.get(`${selectors.todoItemEdited} .label`).should('not.exist')
       checkNumberOfTodosInLocalStorage(3)
     })
 
